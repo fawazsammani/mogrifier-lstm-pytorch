@@ -69,7 +69,7 @@ h,c = mog_lstm(xt, (ht, ct))
 print(h.shape)
 print(c.shape)
 ```
-
+Output:
 ```
 (5,512)
 (5,512)
