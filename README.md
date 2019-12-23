@@ -1,7 +1,7 @@
 ### Implementation of Mogrifier LSTM Cell in PyTorch
 This follows the implementation of a Mogrifier LSTM proposed [here](https://arxiv.org/pdf/1909.01792.pdf)
 
-The Mogrifier1 LSTM is an LSTM where two inputs x and h_prev modulate one another in an alternating fashion before the LSTM computation.
+The Mogrifier LSTM is an LSTM where two inputs x and h_prev modulate one another in an alternating fashion before the LSTM computation.
 
 ![Capture](https://user-images.githubusercontent.com/30661597/71353181-437f2080-25b3-11ea-97e6-fd52c796ad64.PNG)
 
