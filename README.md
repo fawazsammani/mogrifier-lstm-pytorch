@@ -59,7 +59,7 @@ class MogrifierLSTM(nn.Module):
 
 The example below shows how you can use a mogrifier LSTM:
 
-```
+```python
 xt = torch.randn(5,512)    # input: (batch_size, input_size)
 ht = torch.randn(5,512)    # hidden_state: (batch_size, hidden_size)
 ct = torch.randn(5,512)    # memory_state: (batch_size, hidden_size)
