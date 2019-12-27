@@ -43,7 +43,7 @@ class MogrifierLSTMCell(nn.Module):
         each of states shape: (batch_size, hidden_size)
         """
         ht, ct = states
-        x, ht = self.mogrify(x,ht)   # Note: This should be called every timestep. Not once only
+        x, ht = self.mogrify(x,ht)   # Note: This should be called every timestep
         gates = self.x2h(x) + self.h2h(ht)    # (batch_size, 4 * hidden_size)
         in_gate, forget_gate, new_memory, out_gate = gates.chunk(4, 1)
         in_gate = torch.sigmoid(in_gate)
