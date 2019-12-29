@@ -60,19 +60,33 @@ class MogrifierLSTMCell(nn.Module):
 The example below shows how you can use a mogrifier LSTM:
 
 ```python
-xt = torch.randn(5,512)    # input: (batch_size, input_size)
-ht = torch.randn(5,512)    # hidden_state: (batch_size, hidden_size)
-ct = torch.randn(5,512)    # memory_state: (batch_size, hidden_size)
+batch_size = 4
+hidden_size = 512
+mogrify_steps = 5
+vocab_size = 30
+max_len = 10
+mog_lstm = MogrifierLSTMCell(hidden_size, hidden_size,mogrify_steps)
 
-mog_lstm = MogrifierLSTMCell(512,512,5)
-h,c = mog_lstm(xt, (ht, ct))
-print(h.shape)
-print(c.shape)
-```
-Output:
-```
-(5,512)
-(5,512)
-```
+# seq of shape (batch_size, max_words)
+seq = torch.LongTensor([[ 8, 29, 18,  1, 17,  3, 26,  6, 26,  5],
+                        [ 8, 28, 15, 12, 13,  2, 26, 16, 20,  0],
+                        [15,  4, 27, 14, 29, 28, 14,  1,  0,  0],
+                        [20, 22, 29, 22, 23, 29,  0,  0,  0,  0]])
 
+emb = nn.Embedding(vocab_size, hidden_size)
+embeeded = emb(seq)
 
+h,c = [torch.zeros(batch_size,hidden_size), torch.zeros(batch_size,hidden_size)]
+hidden_states = []
+for step in range(max_len):
+    x = embeeded[:, step]
+    h,c = mog_lstm(x, (h, c))
+    hidden_states.append(h.unsqueeze(1))
+    
+hidden_states = torch.cat(hidden_states, dim = 1)
+print(hidden_states.shape)
+```
+This outputs:
+```
+torch.Size([4, 10, 512])
+```
