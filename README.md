@@ -61,8 +61,8 @@ The example below shows how you can use a mogrifier LSTM:
 
 ```python
 xt = torch.randn(5,512)    # input: (batch_size, input_size)
-ht = torch.zeros(5,512)    # hidden_state: (batch_size, hidden_size)
-ct = torch.zeros(5,512)    # memory_state: (batch_size, hidden_size)
+ht = torch.randn(5,512)    # hidden_state: (batch_size, hidden_size)
+ct = torch.randn(5,512)    # memory_state: (batch_size, hidden_size)
 
 mog_lstm = MogrifierLSTMCell(512,512,5)
 h,c = mog_lstm(xt, (ht, ct))
