@@ -18,8 +18,13 @@ class MogrifierLSTMCell(nn.Module):
         self.input_size = input_size
         self.x2h = nn.Linear(input_size, 4 * hidden_size)
         self.h2h = nn.Linear(hidden_size, 4 * hidden_size)
-        self.q = nn.Linear(hidden_size, input_size)
-        self.r = nn.Linear(input_size, hidden_size)
+        self.mogrifier_list = nn.ModuleList([nn.Linear(hidden_size, input_size)])  # start with q
+        for i in range(1, mogrify_steps):
+            if i%2 == 0:
+                self.mogrifier_list.extend([nn.Linear(hidden_size, input_size)])  # q
+            else:
+                self.mogrifier_list.extend([nn.Linear(input_size, hidden_size)])  # r
+        
         self.tanh = nn.Tanh()
         self.init_parameters()
         self.mogrify_steps = mogrify_steps
@@ -30,11 +35,11 @@ class MogrifierLSTMCell(nn.Module):
             p.data.uniform_(-std, std)
             
     def mogrify(self, x, h):
-        for i in range(1,self.mogrify_steps+1):
-            if i % 2 == 0:
-                h = (2*torch.sigmoid(self.r(x))) * h
+        for i in range(self.mogrify_steps):
+            if (i+1) % 2 == 0: 
+                h = (2*torch.sigmoid(self.mogrifier_list[i](x))) * h
             else:
-                x = (2*torch.sigmoid(self.q(h))) * x
+                x = (2*torch.sigmoid(self.mogrifier_list[i](h))) * x
         return x, h
 
     def forward(self, x, states):
@@ -54,7 +59,6 @@ class MogrifierLSTMCell(nn.Module):
         h_new = out_gate * self.tanh(c_new)
 
         return h_new, c_new
-
 ```
 
 The example below shows how you can use a mogrifier LSTM:
@@ -62,10 +66,11 @@ The example below shows how you can use a mogrifier LSTM:
 ```python
 batch_size = 4
 hidden_size = 512
+input_size = 256
 mogrify_steps = 5
 vocab_size = 30
 max_len = 10
-mog_lstm = MogrifierLSTMCell(hidden_size, hidden_size,mogrify_steps)
+mog_lstm = MogrifierLSTMCell(input_size, hidden_size,mogrify_steps)
 
 # seq of shape (batch_size, max_words)
 seq = torch.LongTensor([[ 8, 29, 18,  1, 17,  3, 26,  6, 26,  5],
@@ -73,7 +78,7 @@ seq = torch.LongTensor([[ 8, 29, 18,  1, 17,  3, 26,  6, 26,  5],
                         [15,  4, 27, 14, 29, 28, 14,  1,  0,  0],
                         [20, 22, 29, 22, 23, 29,  0,  0,  0,  0]])
 
-emb = nn.Embedding(vocab_size, hidden_size)
+emb = nn.Embedding(vocab_size, input_size)
 embeeded = emb(seq)
 
 h,c = [torch.zeros(batch_size,hidden_size), torch.zeros(batch_size,hidden_size)]
