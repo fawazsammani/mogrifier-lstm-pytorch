@@ -16,8 +16,10 @@ class MogrifierLSTMCell(nn.Module):
         super(MogrifierLSTMCell, self).__init__()
         self.hidden_size = hidden_size
         self.input_size = input_size
+        self.mogrify_steps = mogrify_steps
         self.x2h = nn.Linear(input_size, 4 * hidden_size)
         self.h2h = nn.Linear(hidden_size, 4 * hidden_size)
+        
         self.mogrifier_list = nn.ModuleList([nn.Linear(hidden_size, input_size)])  # start with q
         for i in range(1, mogrify_steps):
             if i%2 == 0:
@@ -27,8 +29,7 @@ class MogrifierLSTMCell(nn.Module):
         
         self.tanh = nn.Tanh()
         self.init_parameters()
-        self.mogrify_steps = mogrify_steps
-    
+        
     def init_parameters(self):
         std = 1.0 / math.sqrt(self.hidden_size)
         for p in self.parameters():
