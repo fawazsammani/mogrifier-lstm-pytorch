@@ -22,7 +22,7 @@ class MogrifierLSTMCell(nn.Module):
         
         self.mogrifier_list = nn.ModuleList([nn.Linear(hidden_size, input_size)])  # start with q
         for i in range(1, mogrify_steps):
-            if i%2 == 0:
+            if i % 2 == 0:
                 self.mogrifier_list.extend([nn.Linear(hidden_size, input_size)])  # q
             else:
                 self.mogrifier_list.extend([nn.Linear(input_size, hidden_size)])  # r
