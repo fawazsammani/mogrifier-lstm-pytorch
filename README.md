@@ -125,8 +125,10 @@ print(outputs.shape)
 print(hidden_states.shape)
 ```
 
-# Factorization of Q and R as products of low-rank matrices
+### Factorization of Q and R as products of low-rank matrices
 Factorization of Q and R as products of low-rank matrices is not implemented. But you can implement it as follows:
+
+```python
 m = 512 
 k = 85  # if set to 80: (512 * 85) + (50 * 512) << (512 * 512)
 n = 512  
@@ -134,6 +136,6 @@ n = 512
 q_left = nn.Parameter(torch.FloatTensor(m, k).uniform_(-math.sqrt(1/n)/2, math.sqrt(1/n)/2))
 q_right = nn.Parameter(torch.FloatTensor(k, n).uniform_(-math.sqrt(1/n)/2, math.sqrt(1/n)/2))
 q = torch.matmul(q_left, q_right)
-
+```
 Then you can create a ModuleList to include all of them
 
