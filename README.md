@@ -130,7 +130,7 @@ Factorization of Q and R as products of low-rank matrices is not implemented. Bu
 
 ```python
 m = 512 
-k = 85  # if set to 80: (512 * 85) + (50 * 512) << (512 * 512)
+k = 85  # if set to 85: (512 * 85) + (50 * 512) << (512 * 512)
 n = 512  
 
 q_left = nn.Parameter(torch.FloatTensor(m, k).uniform_(-math.sqrt(1/n)/2, math.sqrt(1/n)/2))
