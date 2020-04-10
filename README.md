@@ -7,7 +7,6 @@ The Mogrifier LSTM is an LSTM where two inputs `x` and `h_prev` modulate one ano
 
 You can easily define the Mogrifier LSTMCell just like defining nn.LSTMCell, with an additional parameter of `mogrify_steps`:
 ```python
-from mog_lstm import MogrifierLSTMCell
 mog_lstm = MogrifierLSTMCell(input_size, hidden_size, mogrify_steps)
 ```
 
