@@ -27,6 +27,6 @@ class MogrifierLSTMCell(nn.Module):
     def forward(self, x, states):
         
         ht, ct = states
-        x, ht = self.mogrify(x, ht)   # Note: This should be called every timestep
+        x, ht = self.mogrify(x, ht)
         ht, ct = self.lstm(x, (ht, ct))
         return ht, ct
