@@ -5,10 +5,19 @@ The Mogrifier LSTM is an LSTM where two inputs `x` and `h_prev` modulate one ano
 
 ![Capture](https://user-images.githubusercontent.com/30661597/71353181-437f2080-25b3-11ea-97e6-fd52c796ad64.PNG)
 
+You can easily use the Mogrifier LSTMCell just like using nn.LSTMCell, with an additional parameter of `mogrify_steps`:
+```self.mog_lstm = MogrifierLSTMCell(input_size, hidden_size, mogrify_steps)```
+
+Here we provide an example of a model with two-layer Mogrifier LSTM. Additionally, the paper uses:
+- Tying embedding weights and output weights
+- Adam optimizer with betas = (0, 0.999), which essentially means ignoring the momentum term in Adam
+
+The above points are implemented as well.
+
 ```python
+from mog_lstm import MogrifierLSTMCell
 import torch
 import torch.nn as nn
-import math
         
 class Model(nn.Module):
     def __init__(self, input_size, hidden_size, mogrify_steps, vocab_size, tie_weights, dropout):
@@ -45,10 +54,7 @@ class Model(nn.Module):
         return outputs, hidden_states 
 ```
 
-Here is an example how you can use the code above:
-
 ```python
-#The example below shows how you can use a mogrifier LSTM:
 input_size = 512
 hidden_size = 512
 mogrify_steps = 5
