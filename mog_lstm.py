@@ -6,7 +6,6 @@ class MogrifierLSTMCell(nn.Module):
 
     def __init__(self, input_size, hidden_size, mogrify_steps):
         super(MogrifierLSTMCell, self).__init__()
-        
         self.mogrify_steps = mogrify_steps
         self.lstm = nn.LSTMCell(input_size, hidden_size)
         self.mogrifier_list = nn.ModuleList([nn.Linear(hidden_size, input_size)])  # start with q
@@ -25,7 +24,6 @@ class MogrifierLSTMCell(nn.Module):
         return x, h
 
     def forward(self, x, states):
-        
         ht, ct = states
         x, ht = self.mogrify(x, ht)
         ht, ct = self.lstm(x, (ht, ct))
