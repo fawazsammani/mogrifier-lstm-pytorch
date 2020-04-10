@@ -14,7 +14,7 @@ Here we provide an example of a model with two-layer Mogrifier LSTM. Additionall
 - Tying embedding weights and output weights
 - Adam optimizer with betas = (0, 0.999), which essentially means ignoring the momentum term in Adam
 
-The above points are implemented as well.
+The above points are implemented below as well.
 
 ```python
 from mog_lstm import MogrifierLSTMCell
