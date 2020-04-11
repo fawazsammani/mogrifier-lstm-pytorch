@@ -10,11 +10,7 @@ You can easily define the Mogrifier LSTMCell just like defining `nn.LSTMCell`, w
 mog_lstm = MogrifierLSTMCell(input_size, hidden_size, mogrify_steps)
 ```
 
-Here we provide an example of a model with two-layer Mogrifier LSTM. Additionally, the paper uses:
-- Tying embedding weights and output weights
-- Adam optimizer with betas = (0, 0.999), which essentially means ignoring the momentum term in Adam
-
-The above points are implemented below as well.
+Here we provide an example of a model with two-layer Mogrifier LSTM. 
 
 ```python
 from mog_lstm import MogrifierLSTMCell
@@ -59,15 +55,16 @@ class Model(nn.Module):
 ```python
 input_size = 512
 hidden_size = 512
-mogrify_steps = 5
-vocab_size = 30  
-dropout = 0.5   # for simplicity: input dropout and output_dropout are 0.5. See paper for exact values
-tie_weights = True
-lr = 3e-3
-betas = (0, 0.999)
-weight_decay = 2.5e-4
-clip_norm = 10
+vocab_size = 30
 batch_size = 4
+lr = 3e-3
+mogrify_steps = 5        # 5 steps give optimal performance according to the paper
+dropout = 0.5            # for simplicity: input dropout and output_dropout are 0.5. See appendix B in the paper for exact values
+tie_weights = True       # in the paper, embedding weights and output weights are tied
+betas = (0, 0.999)       # in the paper the momentum term in Adam is ignored
+weight_decay = 2.5e-4    # weight decay is around this value, see appendix B in the paper
+clip_norm = 10           # paper uses cip_norm of 10
+
 model = Model(input_size, hidden_size, mogrify_steps, vocab_size, tie_weights, dropout)
 optimizer = torch.optim.Adam(model.parameters(), lr=lr, betas=betas, eps=1e-08, weight_decay=weight_decay)
 
