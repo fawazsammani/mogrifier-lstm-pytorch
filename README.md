@@ -89,7 +89,7 @@ Factorization of Q and R as products of low-rank matrices is not implemented. Bu
 m = 512 
 k = 85  # if set to 85: (512 * 85) + (85 * 512) << (512 * 512)
 n = 512  
-q = torch.nn.Sequential(torch.nn.Linear (n, k, bias = False), torch.nn.Linear (k, m), bias = False)
+q = torch.nn.Sequential(torch.nn.Linear(n, k, bias = False), torch.nn.Linear(k, m, bias = False))
 ```
 Then you can replace the nn.Linear layer in self.mogrifier_list with this sequential layer.
 
