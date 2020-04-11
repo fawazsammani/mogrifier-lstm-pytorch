@@ -91,6 +91,5 @@ k = 85  # if set to 85: (512 * 85) + (85 * 512) << (512 * 512)
 n = 512  
 q = torch.nn.Sequential(torch.nn.Linear(m, k, bias = False), torch.nn.Linear(k, n, bias = False))
 ```
-Then you can replace the `nn.Linear` layer in `self.mogrifier_list` with this sequential layer.
-Thanks to [KFrank](https://discuss.pytorch.org/u/KFrank) for his help on this. 
+Then you can replace the `nn.Linear` layer in `self.mogrifier_list` with this sequential layer. Thanks to [KFrank](https://discuss.pytorch.org/u/KFrank) for his help on this. 
 
