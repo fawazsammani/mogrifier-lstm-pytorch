@@ -86,7 +86,16 @@ Factorization of Q and R as products of low-rank matrices is not implemented. Bu
 m = 512 
 k = 85  # if set to 85: (512 * 85) + (85 * 512) << (512 * 512)
 n = 512  
-q = torch.nn.Sequential(torch.nn.Linear(m, k, bias = False), torch.nn.Linear(k, n, bias = False))
+q = torch.nn.Sequential(torch.nn.Linear(m, k, bias = False), torch.nn.Linear(k, n, bias = True))
 ```
-Then you can replace the `nn.Linear` layer in `self.mogrifier_list` with this sequential layer. Thanks to [KFrank](https://discuss.pytorch.org/u/KFrank) for his help on this. 
+Then you can replace the `nn.Linear` layer in `self.mogrifier_list` with this sequential layer:
+```python
+self.mogrifier_list = nn.ModuleList([torch.nn.Sequential(torch.nn.Linear(hidden_size, k, bias = False), torch.nn.Linear(k, input_size, bias = True))])  # start with q
+for i in range(1, mogrify_steps):
+        if i % 2 == 0:
+                self.mogrifier_list.extend([torch.nn.Sequential(torch.nn.Linear(hidden_size, k, bias = False), torch.nn.Linear(k, input_size, bias = True))])  # q
+        else:
+                self.mogrifier_list.extend([torch.nn.Sequential(torch.nn.Linear(input_size, k, bias = False), torch.nn.Linear(k, hidden_size, bias = True))])  # r
+```
+Thanks to [KFrank](https://discuss.pytorch.org/u/KFrank) for his help on the factorization part. 
 
