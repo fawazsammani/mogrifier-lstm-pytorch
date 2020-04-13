@@ -92,10 +92,10 @@ Then you can replace the `nn.Linear` layer in `self.mogrifier_list` with this se
 ```python
 self.mogrifier_list = nn.ModuleList([torch.nn.Sequential(torch.nn.Linear(hidden_size, k, bias = False), torch.nn.Linear(k, input_size, bias = True))])  # start with q
 for i in range(1, mogrify_steps):
-        if i % 2 == 0:
-                self.mogrifier_list.extend([torch.nn.Sequential(torch.nn.Linear(hidden_size, k, bias = False), torch.nn.Linear(k, input_size, bias = True))])  # q
-        else:
-                self.mogrifier_list.extend([torch.nn.Sequential(torch.nn.Linear(input_size, k, bias = False), torch.nn.Linear(k, hidden_size, bias = True))])  # r
+    if i % 2 == 0:
+        self.mogrifier_list.extend([torch.nn.Sequential(torch.nn.Linear(hidden_size, k, bias = False), torch.nn.Linear(k, input_size, bias = True))])  # q
+    else:
+        self.mogrifier_list.extend([torch.nn.Sequential(torch.nn.Linear(input_size, k, bias = False), torch.nn.Linear(k, hidden_size, bias = True))])  # r
 ```
 Thanks to [KFrank](https://discuss.pytorch.org/u/KFrank) for his help on the factorization part. 
 
