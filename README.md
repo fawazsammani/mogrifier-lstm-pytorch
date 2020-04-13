@@ -80,7 +80,7 @@ print(hidden_states.shape)
 ```
 
 ### Factorization of Q and R as products of low-rank matrices
-Factorization of Q and R as products of low-rank matrices is not implemented. But you can implement it as follows:
+If you would like to implement the Factorization of Q and R as products of low-rank matrices as done in the paper, you can do as follows:
 
 ```python
 input_size = 512  
