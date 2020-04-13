@@ -83,10 +83,11 @@ print(hidden_states.shape)
 Factorization of Q and R as products of low-rank matrices is not implemented. But you can implement it as follows:
 
 ```python
-m = 512 
+input_size = 512  
+hidden_size = 512 
 k = 85  # if set to 85: (512 * 85) + (85 * 512) << (512 * 512)
-n = 512  
-q = torch.nn.Sequential(torch.nn.Linear(m, k, bias = False), torch.nn.Linear(k, n, bias = True))
+q = torch.nn.Sequential(torch.nn.Linear(hidden_size, k, bias = False), torch.nn.Linear(k, input_size, bias = True))
+r = torch.nn.Sequential(torch.nn.Linear(input_size, k, bias = False), torch.nn.Linear(k, hidden_size, bias = True))
 ```
 Then you can replace the `nn.Linear` layer in `self.mogrifier_list` with this sequential layer:
 ```python
